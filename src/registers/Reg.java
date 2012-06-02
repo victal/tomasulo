@@ -1,15 +1,15 @@
-package registradores;
+package registers;
 
 public class Reg {
 
 	private int id;
 	private Integer value;
-	private String qi; 
+	private Integer qi; 
 
 	public Reg(int id) {
 		this.id = id;
 		this.value=0;
-		this.qi = "";
+		this.qi = null;
 	}
 
 	public void setValue(Integer value) {
@@ -20,10 +20,10 @@ public class Reg {
 		return this.value;
 	}
 	
-	public String getQi(){
+	public Integer getQi(){
 		return qi;
 	}
-	public void setQi(String qi){
+	public void setQi(Integer qi){
 		this.qi = qi;
 	}
 
