@@ -19,4 +19,12 @@ public class Processor {
 //	private List<AddExecUnit> adders;
 //	private List<MultExecUnit> multipliers;
 	private ReorderingBuffer reorder;
+	
+	public ReorderingBuffer getReorder() {
+		return reorder;
+	}
+
+	public List<Reg> getRegs() {
+		return regs;
+	}
 }

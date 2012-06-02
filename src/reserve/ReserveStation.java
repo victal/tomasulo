@@ -2,6 +2,8 @@ package reserve;
 
 import java.util.List;
 
+import buffers.ReorderingBuffer;
+
 import processor.Processor;
 
 import registers.Reg;
