@@ -26,5 +26,8 @@ public class Reg {
 	public void setQi(Integer qi){
 		this.qi = qi;
 	}
+	public boolean isBusy(){
+		return !(this.qi == null);
+	}
 
 }
