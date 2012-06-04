@@ -147,6 +147,9 @@ public class Instrucao implements IInstrucao {
 		return this.instance.isJump();
 	}
 
+	public Integer getDuration(){
+		return this.instance.getDuration();
+	}
 
 
 

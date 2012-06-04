@@ -10,4 +10,26 @@ public class ReorderingLine {
 	private Instrucao inst;
 	private Integer state;
 	private Integer valor;
+	
+	public ReorderingLine() {
+		inst=null;
+		busy = false;
+		state = ReorderingLine.EXECUCAO;
+	}
+	
+	public void load(Instrucao i){
+		inst = i;
+		busy = true;
+	}
+	
+	public void setValue(Integer value){
+		valor = value;
+	}
+	
+	public void advancePhase(){
+		if(state<2)state++;
+	}
+	public boolean isBusy(){
+		return busy;
+	}
 }

@@ -33,4 +33,8 @@ public class InstrucaoMul extends InstrucaoSuperFormatR implements IInstrucao {
 					+",R"+Integer.valueOf(getRs(),2)+",R"+Integer.valueOf(getRt(),2);
 		return i;
 	}
+	
+	public Integer getDuration(){
+		return 3;
+	}
 }

@@ -18,6 +18,8 @@ public interface IInstrucao {
 	
 	public String getNome();
 	
+	public Integer getDuration();
+	
 	public String getALUOp();
 
 	public boolean isBranch();
