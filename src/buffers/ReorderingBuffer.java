@@ -38,6 +38,7 @@ public class ReorderingBuffer {
 			else{
 				Instrucao i = line.getInst();
 				if(i.isBranch()){ // Branches
+					
 				}
 				else if(i.getNome().equals("sw")){//Store
 					MemoriaDados md = Processor.getProcessor().getDataMemory();
