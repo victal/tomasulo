@@ -14,8 +14,19 @@ import instructions.Instrucao;
 public class ReorderingBuffer {
 	public static final Integer SIZE = 20;
 	
-	private List<ReorderingLine> buffer = new ArrayList<ReorderingLine>(ReorderingBuffer.SIZE);
-	private Integer listinit=0;
+	private List<ReorderingLine> buffer;
+	private MemoriaDados md;
+	private Integer listinit
+	;
+	public ReorderingBuffer(){
+		buffer = new ArrayList<ReorderingLine>();
+		for(int i = 0;i<ReorderingBuffer.SIZE;i++){
+			buffer.add(new ReorderingLine());
+		}
+		this.listinit = 0;
+	}
+	
+	
 	public Integer loadFirstEmpty(Instrucao inst) {
 		for(int i = listinit;i<listinit+SIZE;i++){
 			if(!buffer.get(i%ReorderingBuffer.SIZE).isBusy()){
@@ -38,7 +49,7 @@ public class ReorderingBuffer {
 			else{
 				Instrucao i = line.getInst();
 				if(i.isBranch()){ // Branches
-					
+					//TODO: Branch
 				}
 				else if(i.getNome().equals("sw")){//Store
 					MemoriaDados md = Processor.getProcessor().getDataMemory();
@@ -49,5 +60,9 @@ public class ReorderingBuffer {
 		buffer.get(listinit).setFree();
 		listinit = (listinit+1)%ReorderingBuffer.SIZE;
 		}
+	}
+	
+	public void setDataMemory(MemoriaDados mem){
+		this.md = mem;
 	}
 }

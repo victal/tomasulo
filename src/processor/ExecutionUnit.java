@@ -6,5 +6,6 @@ public interface ExecutionUnit {
 	
 	public void chooseStation();
 	public Integer runStep();
+	public List<Reg> getRegs();
 	
 }

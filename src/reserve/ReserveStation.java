@@ -12,6 +12,7 @@ import instructions.Instrucao;
 
 public class ReserveStation {
 
+	private ExecutionUnit eu;
 	private Instrucao instrucao;
 	private Integer qj, qk; //tudo em relação ao buffer de reordenação
 	private Integer vj, vk;
@@ -40,7 +41,7 @@ public class ReserveStation {
 	public void load(Instrucao i){
 		this.busy = true;
 		instrucao = i;
-		List<Reg> regs = Processor.getProcessor().getRegs();
+
 		List<Integer> regslidos = i.getRegistradoresLidos();
 		if(regs.get(regslidos.get(0)).getQi()!=0)
 			this.qj = regs.get(regslidos.get(0)).getQi();
