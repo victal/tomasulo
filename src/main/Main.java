@@ -10,6 +10,8 @@ import java.util.List;
 import memorias.MemBuilder;
 import memorias.MemoriaDados;
 import memorias.MemoriaInstrucao;
+import processor.Processor;
+import processor.ProcessorBuilder;
 
 public class Main {
 
@@ -18,7 +20,7 @@ public class Main {
 		File f = new File("teste.dat");
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
-		
+		Processor p = ProcessorBuilder.build(meminst, memdados);
 	}
 	public static List<String> lerInstrucoes(File f) {
 		List<String> res = new ArrayList<String>();

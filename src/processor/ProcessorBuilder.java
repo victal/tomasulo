@@ -6,13 +6,14 @@ import java.util.List;
 import memorias.MemoriaDados;
 import memorias.MemoriaInstrucao;
 import registers.Reg;
+import buffers.PredictionBuffer;
 import buffers.ReorderingBuffer;
 import circuits.InstDecode;
 import circuits.InstFetch;
 
 public class ProcessorBuilder {
 
-	public static Processor build(MemoriaInstrucao inst, MemoriaDados data){
+	public static Processor build(MemoriaInstrucao inst, MemoriaDados data, Integer predictionBufferSize){
 		Processor p = new Processor();
 		List<Reg> regs = buildRegs();
 		p.setRegs(regs);
@@ -20,8 +21,8 @@ public class ProcessorBuilder {
 		p.setMemInstruction(inst);
 		
 		buildReorderBuffer(p,data);
-		buildIFandID(p,inst);
-		
+		buildIFandID(p,inst, predictionBufferSize);
+		return p;
 	}
 	
 	private static List<Reg> buildRegs() {
@@ -32,13 +33,15 @@ public class ProcessorBuilder {
 		return regs;
 	}
 
-	private static void buildIFandID(Processor p, MemoriaInstrucao mem){
+	private static void buildIFandID(Processor p, MemoriaInstrucao mem, Integer pbSize){
 		InstFetch iF = new InstFetch();
 		iF.setMem(mem);
 		p.setIF(iF);
 		InstDecode iD = new InstDecode();
 		iD.setIF(iF);
-		iD.setPredictionBuffer();
+		PredictionBuffer pb = new PredictionBuffer(pbSize);
+		iD.setPredictionBuffer(pb);
+		p.getReorder().setPredictionBuffer(pb);
 		p.setID(iD);
 	}
 	private static void buildReorderBuffer(Processor p, MemoriaDados data){

@@ -53,7 +53,7 @@ public class ReserveStation {
 		}
 			
 		
-		ReorderingBuffer reorder = Processor.getProcessor().getReorder();
+		ReorderingBuffer reorder = eu.getReorder();
 		this.dest = reorder.loadFirstEmpty(i);
 		regs.get(i.getRegistradorEscrito()).setQi(dest);
 	} 
@@ -63,5 +63,11 @@ public class ReserveStation {
 	
 	public Integer getDest(){
 		return dest;
+	}
+	public Integer getVj(){
+		return vj;
+	}
+	public Integer getVk(){
+		return vk;
 	}
 }

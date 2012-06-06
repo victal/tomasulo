@@ -16,10 +16,14 @@ public class InstDecode {
 		this.toDecode = new Instrucao(IInstrucao.NOP_CODE);
 		this.decoded=null;
 	}
-	public void decode(){
+	public void decodeInst(){
+		if(toDecode.isBranch())
 		this.decoded = this.toDecode;
 	}
 	public Integer getNewPC(){
+		if(toDecode.isJump()){
+			return toDecode.getDadoImediato();
+		}
 		return IF.getPC()+4;
 	}
 	

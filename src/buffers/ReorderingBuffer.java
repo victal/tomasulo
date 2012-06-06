@@ -16,8 +16,7 @@ public class ReorderingBuffer {
 	
 	private List<ReorderingLine> buffer;
 	private MemoriaDados md;
-	private Integer listinit
-	;
+	private Integer listinit;
 	public ReorderingBuffer(){
 		buffer = new ArrayList<ReorderingLine>();
 		for(int i = 0;i<ReorderingBuffer.SIZE;i++){

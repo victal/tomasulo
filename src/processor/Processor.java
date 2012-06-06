@@ -27,8 +27,8 @@ public class Processor {
 	public void runStep(){
 		/*IF e ID*/
 		
-		//ID.decodeInst();
-		//IF.setNewPC(ID.getNewPC());
+		ID.decodeInst(); // Coloca no Buffer de Reordenação tbm;
+		IF.setNewPC(ID.getNewPC());
 		//Instrucao i = ID.getDecodedInst();
 		ID.putNextInst(IF.getnextInst());
 				
