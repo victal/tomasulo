@@ -38,6 +38,8 @@ public class InstrucaoJmp extends InstrucaoSuperFormatJ  implements IInstrucao {
 		return getNome().toUpperCase()+" "+getDadoImediato();
 	}
 	
-	
+	public Integer getDuration(){
+		return 1;
+	}
 
 }

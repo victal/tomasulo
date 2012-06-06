@@ -33,5 +33,9 @@ public class InstrucaoLw extends InstrucaoSuperFormatI  implements IInstrucao {
 				+" R"+Integer.valueOf(getRt(),2)+",("+getDadoImediato()+")R"+Integer.valueOf(getRs(),2);
 		return i;
 	}
+	
+	public Integer getDuration(){
+		return 4;
+	}
 
 }

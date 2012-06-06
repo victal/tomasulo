@@ -38,5 +38,9 @@ public class InstrucaoBne extends InstrucaoSuperFormatI  implements IInstrucao {
 		return i;
 	}
 	
+	public Integer getDuration(){
+		return 1;
+	}
+	
 
 }

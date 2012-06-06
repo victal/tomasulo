@@ -37,5 +37,8 @@ public class InstrucaoAddi extends InstrucaoSuperFormatI  implements IInstrucao 
 		return i;
 	}
 
+	public Integer getDuration(){
+		return 1;
+	}
 	
 }

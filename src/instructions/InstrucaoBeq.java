@@ -37,7 +37,10 @@ public class InstrucaoBeq extends InstrucaoSuperFormatI  implements IInstrucao {
 		String i = getNome().toUpperCase()+" R"+Integer.valueOf(getRs(),2)+",R"+Integer.valueOf(getRt(),2)+","+getDadoImediato();
 		return i;
 	}
-
+	
+	public Integer getDuration(){
+		return 1;
+	}
 	
 	
 	

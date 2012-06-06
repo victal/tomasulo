@@ -35,7 +35,9 @@ public class InstrucaoAdd extends InstrucaoSuperFormatR implements IInstrucao {
 		return i;
 	}
 	
-	
+	public Integer getDuration(){
+		return 1;
+	}
 	
 
 

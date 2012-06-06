@@ -53,7 +53,5 @@ public class InstrucaoSuperFormatR {
 		return false;
 	}
 
-	public Integer getDuration(){
-		return 1;
-	}
+	
 }

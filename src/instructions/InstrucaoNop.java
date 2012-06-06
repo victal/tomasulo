@@ -37,4 +37,9 @@ public class InstrucaoNop extends InstrucaoSuperFormatR implements IInstrucao {
 	public String getInstrucaoMIPS(){
 		return getNome().toUpperCase();
 	}
+	
+	public Integer getDuration(){
+		return 1;
+	}
+	
 }
