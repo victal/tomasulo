@@ -1,18 +1,18 @@
 package reserve;
 
+import instructions.Instrucao;
+
 import java.util.List;
 
-import buffers.ReorderingBuffer;
-
+import processor.ExecutionUnit;
 import processor.Processor;
-
 import registers.Reg;
-
-import instructions.Instrucao;
+import buffers.ReorderingBuffer;
 
 public class ReserveStation {
 
 	private ExecutionUnit eu;
+	private List<Reg> regs;
 	private Instrucao instrucao;
 	private Integer qj, qk; //tudo em relação ao buffer de reordenação
 	private Integer vj, vk;
@@ -57,5 +57,11 @@ public class ReserveStation {
 		this.dest = reorder.loadFirstEmpty(i);
 		regs.get(i.getRegistradorEscrito()).setQi(dest);
 	} 
+	public void setRegs(List<Reg> regs){
+		this.regs = regs;
+	}
 	
+	public Integer getDest(){
+		return dest;
+	}
 }

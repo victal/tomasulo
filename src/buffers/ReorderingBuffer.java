@@ -52,7 +52,6 @@ public class ReorderingBuffer {
 					//TODO: Branch
 				}
 				else if(i.getNome().equals("sw")){//Store
-					MemoriaDados md = Processor.getProcessor().getDataMemory();
 					md.setValue(line.getAddress(),line.getValue());
 				}
 			

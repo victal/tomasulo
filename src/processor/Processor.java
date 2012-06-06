@@ -13,16 +13,7 @@ import buffers.ReorderingBuffer;
 import registers.Reg;
 
 public class Processor {
-	private static Processor _instance;
-	public static Processor getProcessor(){
-		return _instance;
-	}
-	public static Processor makeProcessor(MemoriaInstrucao inst, MemoriaDados data){
-		if(Processor._instance==null){
-			Processor._instance = ProcessorBuilder.build(inst,data);
-		}
-		return _instance;
-	}
+	
 	
 	private List<Reg> regs;
 //	private List<AddExecUnit> adders;
@@ -70,5 +61,17 @@ public class Processor {
 	}
 	public void setMemData(MemoriaDados data) {
 		this.memData = data;
+	}
+	public void setIF(InstFetch IF){
+		this.IF=IF;
+	}
+	public void setReorder(ReorderingBuffer r) {
+		this.reorder=r;
+	}
+	public void setRegs(List<Reg> r) {
+		this.regs = r;
+	}
+	public void setID(InstDecode id) {
+		this.ID=id;
 	}
 }

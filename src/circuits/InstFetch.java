@@ -25,4 +25,8 @@ public class InstFetch {
 		if(i==null) i= new Instrucao(IInstrucao.NOP_CODE);
 		return i;
 	}
+	
+	public Integer getPC(){
+		return pc;
+	}
 }

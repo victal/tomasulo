@@ -1,6 +1,9 @@
 package processor;
+
+import java.util.List;
+
+import registers.Reg;
 //import reserve.ReserveStation;
-//import java.util.List;
 
 public interface ExecutionUnit {
 	
