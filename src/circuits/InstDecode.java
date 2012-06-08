@@ -17,12 +17,20 @@ public class InstDecode {
 		this.decoded=null;
 	}
 	public void decodeInst(){
-		if(toDecode.isBranch())
+		if(toDecode.isBranch()){
+			Integer jumpPC = toDecode.getDadoImediato()*4 + IF.getPC();
+			if(toDecode.getNome().equals("ble"))
+				jumpPC = toDecode.getDadoImediato();
+			this.buffer.addLine(toDecode, IF.getPC(), jumpPC);
+		}
 		this.decoded = this.toDecode;
 	}
 	public Integer getNewPC(){
 		if(toDecode.isJump()){
 			return toDecode.getDadoImediato();
+		}
+		else if(toDecode.isBranch()){
+			return buffer.getGuessPC(toDecode);
 		}
 		return IF.getPC()+4;
 	}

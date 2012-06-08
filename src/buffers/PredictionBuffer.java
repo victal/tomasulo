@@ -5,6 +5,7 @@ import instructions.Instrucao;
 import java.util.HashMap;
 
 import prediction.OneBitPreditor;
+import prediction.Preditor;
 import prediction.StaticPreditor;
 import prediction.TwoBitPreditor;
 
@@ -22,7 +23,20 @@ public class PredictionBuffer {
 			preditorType = TwoBitPreditor.class;
 	}
 	//Line: Instruction, PC da instrucao, PC de pulo e Preditor
-	public addLine(Instrucao i,Integer pc){
-		Integer jumpPC = i. 
+	public void addLine(Instrucao i,Integer pc, Integer jumpPC){
+		Preditor p;
+		try {
+			p = (Preditor) preditorType.newInstance();
+			PredictionLine pl = new PredictionLine(pc, jumpPC, p);
+			bufferlines.put(i, pl);
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+	public Integer getGuessPC(Instrucao i){
+		return bufferlines.get(i).getGuessPC();
+	}
+	public PredictionLine getLine(Instrucao i){
+		return bufferlines.get(i);
 	}
 }
