@@ -22,6 +22,7 @@ public class Main {
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados);
 	}
+	
 	public static List<String> lerInstrucoes(File f) {
 		List<String> res = new ArrayList<String>();
 		try {

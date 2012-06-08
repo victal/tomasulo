@@ -16,6 +16,7 @@ public class Processor {
 	
 	
 	private List<Reg> regs;
+	private AddExecUnit adder;
 //	private List<AddExecUnit> adders;
 //	private List<MultExecUnit> multipliers;
 	private ReorderingBuffer reorder;

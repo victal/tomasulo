@@ -98,4 +98,10 @@ public class ReorderingBuffer {
 			}
 		}
 	}
+	public Integer getState(Integer i){
+		return buffer.get(i).getState();
+	}
+	public Integer getValue(Integer i){
+		return buffer.get(i).getValue();
+	}
 }

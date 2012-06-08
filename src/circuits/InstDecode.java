@@ -19,9 +19,9 @@ public class InstDecode {
 	public void decodeInst(){
 		if(toDecode==null) return;//POG clock = 0;
 		if(toDecode.isBranch()){
-			Integer jumpPC = toDecode.getDadoImediato()*4 + IF.getPC();
-			if(toDecode.getNome().equals("ble"))
-				jumpPC = toDecode.getDadoImediato();
+			/*Integer jumpPC = toDecode.getDadoImediato()*4 + IF.getPC();
+			if(toDecode.getNome().equals("ble"))*/
+			Integer jumpPC = toDecode.getDadoImediato();
 			this.buffer.addLine(toDecode, IF.getPC(), jumpPC);
 		}
 		this.decoded = this.toDecode;

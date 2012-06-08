@@ -1,12 +1,14 @@
 package processor;
 
+import buffers.ReorderingBuffer;
 import instructions.Instrucao;
 
 
 public interface ExecutionUnit {
 	
 	public void chooseStation();
-	public Integer runStep();
+	public void runStep();
 	public void clean();
-	public void loadInst(Instrucao i);	
+	public void loadInst(Instrucao i);
+	public ReorderingBuffer getReorder();
 }

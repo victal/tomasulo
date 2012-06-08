@@ -8,6 +8,7 @@ import processor.ExecutionUnit;
 import processor.Processor;
 import registers.Reg;
 import buffers.ReorderingBuffer;
+import buffers.ReorderingLine;
 
 public class ReserveStation {
 
@@ -40,27 +41,39 @@ public class ReserveStation {
 	
 	public void load(Instrucao i){
 		this.busy = true;
-		instrucao = i;
-
-		List<Integer> regslidos = i.getRegistradoresLidos();
-		if(regs.get(regslidos.get(0)).getQi()!=0)
-			this.qj = regs.get(regslidos.get(0)).getQi();
-		else this.vj = regs.get(regslidos.get(0)).getValue();
-		if(regslidos.size()>1){
-			if(regs.get(regslidos.get(1)).getQi()!=0)
-				this.qk = regs.get(regslidos.get(1)).getQi();
-			else this.vk = regs.get(regslidos.get(1)).getValue();
-		}
-			
-		
+		this.instrucao = i;
 		ReorderingBuffer reorder = eu.getReorder();
+		List<Integer> regslidos = i.getRegistradoresLidos();
+		
+		if(regslidos.size()>0){//add, mul, sub, div, branches,lw
+			if(regs.get(regslidos.get(0)).getQi()!=0){
+				if(reorder.getState(regs.get(regslidos.get(0)).getQi())==ReorderingLine.CONSOLIDAR)
+					this.vj = reorder.getValue(regs.get(regslidos.get(0)).getQi());
+				else this.qj = regs.get(regslidos.get(0)).getQi();
+			}
+			else this.vj = regs.get(regslidos.get(0)).getValue();
+		}
+		if(regslidos.size()==2){
+			if(regs.get(regslidos.get(1)).getQi()!=0){
+				if(reorder.getState(regs.get(regslidos.get(1)).getQi())==ReorderingLine.CONSOLIDAR)
+					this.vk = reorder.getValue(regs.get(regslidos.get(1)).getQi());
+				else this.qk = regs.get(regslidos.get(1)).getQi();
+			}
+			else this.vk = regs.get(regslidos.get(1)).getValue();	
+		}
+		if(i.getNome().equals("addi"))
+			this.vk = i.getDadoImediato();
+		else if(i.getNome().equals("sw"))
+			this.A = i.getDadoImediato();
+		if(i.isBranch()||i.isJump()){
+			this.A = i.getDadoImediato();
+		}
 		this.dest = reorder.loadFirstEmpty(i);
 		regs.get(i.getRegistradorEscrito()).setQi(dest);
 	} 
 	public void setRegs(List<Reg> regs){
 		this.regs = regs;
 	}
-	
 	public Integer getDest(){
 		return dest;
 	}
@@ -69,5 +82,21 @@ public class ReserveStation {
 	}
 	public Integer getVk(){
 		return vk;
+	}
+	public Integer getQj(){
+		return qj;
+	}
+	public Integer getQk(){
+		return qk;
+	}
+	public void clean(){
+		qj=null;
+		qk=null;
+		vj=null;
+		vk=null;
+		A=null;
+		busy=false;
+		dest=null;
+		instrucao = null;
 	}
 }
