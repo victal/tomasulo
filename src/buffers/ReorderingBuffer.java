@@ -50,7 +50,7 @@ public class ReorderingBuffer {
 					PredictionLine pl = pbuffer.getLine(i);
 					if(!pl.getGuessPC().equals(line.getValue())){//errou, apagar tudo
 						cleanAllInstructions(); 
-						setNewPC(line.getValue());
+						setNewPC(line.getValue());1
 					}
 					if(line.getValue().equals(pl.getInstPC())){
 						pl.addNotJump();
