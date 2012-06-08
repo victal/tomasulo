@@ -1,16 +1,16 @@
 package processor;
 
-import java.util.List;
+import instructions.Instrucao;
 
-import circuits.InstDecode;
-import circuits.InstFetch;
+import java.util.List;
 
 import memorias.MemoriaDados;
 import memorias.MemoriaInstrucao;
-
-import buffers.ReorderingBuffer;
-
 import registers.Reg;
+import buffers.ReorderingBuffer;
+import buffers.ReorderingLine;
+import circuits.InstDecode;
+import circuits.InstFetch;
 
 public class Processor {
 	
@@ -29,24 +29,36 @@ public class Processor {
 		
 		ID.decodeInst(); // Coloca no Buffer de Reordenação tbm;
 		IF.setNewPC(ID.getNewPC());
-		//Instrucao i = ID.getDecodedInst();
-		ID.putNextInst(IF.getnextInst());
-				
-		/*Colocar na estação de reserva*/
-		//String eu = i.getEUType();
-		//if(eu.equals("add")){}
-		//else if(eu.equals("mul")){}
-		//else{}
+
+		emitirInst();
 		
 		/* Execução e colocação no reorderingBuffer */
 		//for i in  execution units
 		// i.choosestation
 		// i.runstep()
 		//Executar instruções nas unidades de execução (A Unidade se encarrega de pegar uma instrução da estação de reserva  
-		reorder.consolidate(regs);
+		reorder.consolidate(regs);//pode alterar o PC
+		ID.putNextInst(IF.getnextInst());
 	}
 	
 	
+	private void emitirInst() {
+		Instrucao i = ID.getDecodedInst();
+		String inome = i.getNome();
+		if(inome.equals("mul")||inome.equals("div")){
+			//put in MulExecUnit
+		}
+		else if(inome.equals("lw")||inome.equals("sw")){
+			//put in MemExecUnit
+		}
+		else{
+			//put in AddExecUnit
+		}
+		reorder.updateState(i,ReorderingLine.EMITIDA);
+		
+	}
+
+
 	public ReorderingBuffer getReorder() {
 		return reorder;
 	}
@@ -74,4 +86,11 @@ public class Processor {
 	public void setID(InstDecode id) {
 		this.ID=id;
 	}
+	public InstFetch getIF(){
+		return IF;
+	}
+	public InstDecode getID(){
+		return ID;
+	}
+	public void cleanExecutionUnits(){asjdlgfhaodslkfhdslkf;}
 }

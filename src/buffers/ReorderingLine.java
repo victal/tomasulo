@@ -3,9 +3,10 @@ package buffers;
 import instructions.Instrucao;
 
 public class ReorderingLine {
-	public static final Integer EXECUCAO = 0;
-	public static final Integer GRAVAR = 1;
-	public static final Integer CONSOLIDAR = 2;
+	public static final Integer EMITIDA = 0;
+	public static final Integer EXECUCAO = 1;
+	public static final Integer GRAVAR = 2;
+	public static final Integer CONSOLIDAR = 3;
 	private boolean busy;
 	private Instrucao inst;
 	private Integer state;
@@ -16,7 +17,7 @@ public class ReorderingLine {
 	public ReorderingLine() {
 		inst=null;
 		busy = false;
-		state = ReorderingLine.EXECUCAO;
+		state = ReorderingLine.EMITIDA;
 	}
 	
 	public void load(Instrucao i){
@@ -24,7 +25,6 @@ public class ReorderingLine {
 		busy = true;
 		dest = i.getRegistradorEscrito();
 		valor = null;
-		dest = null;
 		address = null;
 	}
 	
@@ -38,8 +38,8 @@ public class ReorderingLine {
 	public Integer getValue(){
 		return valor;
 	}
-	public void advancePhase(){
-		if(state<2)state++;
+	public void setState(Integer state){
+		if(state>=0 && state<=3)this.state=state;
 	}
 	public boolean isBusy(){
 		return busy;

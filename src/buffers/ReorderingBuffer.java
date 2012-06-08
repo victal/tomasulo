@@ -1,17 +1,18 @@
 package buffers;
 
+import instructions.Instrucao;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import memorias.MemoriaDados;
-
+import processor.Processor;
 import registers.Reg;
-
-import instructions.Instrucao;
 
 public class ReorderingBuffer {
 	public static final Integer SIZE = 20;
 
+	private Processor p;
 	private List<ReorderingLine> buffer;
 	private MemoriaDados md;
 	private Integer listinit;
@@ -50,7 +51,7 @@ public class ReorderingBuffer {
 					PredictionLine pl = pbuffer.getLine(i);
 					if(!pl.getGuessPC().equals(line.getValue())){//errou, apagar tudo
 						cleanAllInstructions(); 
-						setNewPC(line.getValue());1
+						p.getIF().setNewPC(line.getValue());
 					}
 					if(line.getValue().equals(pl.getInstPC())){
 						pl.addNotJump();
@@ -73,7 +74,8 @@ public class ReorderingBuffer {
 		for(int i = listinit;i<listinit+SIZE;i++){
 			buffer.get(i).setFree();
 		}
-		//TODO:erase instructions on ID and reserveStations
+		p.getID().clean();
+		p.cleanExecutionUnits();
 	}
 
 
@@ -85,5 +87,15 @@ public class ReorderingBuffer {
 	public void setPredictionBuffer(PredictionBuffer pb) {
 		this.pbuffer = pb; 
 		
+	}
+	public void setProcessor(Processor p){
+		this.p = p;
+	}
+	public void updateState(Instrucao inst, Integer state){
+		for(int i = listinit;i<listinit+SIZE;i++){
+			if(buffer.get(i).getInst().equals(inst)){
+				buffer.get(i).setState(state);
+			}
+		}
 	}
 }

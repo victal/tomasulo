@@ -6,9 +6,11 @@ import reserve.ReserveStation;
 
 public class AddExecUnit implements ExecutionUnit {
 	
+	private static final Integer numStations = 3;
 	private List<ReserveStation> stations;
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
+	
 	public Integer runStep() {
 		if(currentNumClocks<current.getInstrucao().getDuration())
 			return null;

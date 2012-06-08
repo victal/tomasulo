@@ -13,10 +13,11 @@ public class InstDecode {
 	private InstFetch IF;
 	
 	public InstDecode(){
-		this.toDecode = new Instrucao(IInstrucao.NOP_CODE);
+		this.toDecode = null;
 		this.decoded=null;
 	}
 	public void decodeInst(){
+		if(toDecode==null) return;//POG clock = 0;
 		if(toDecode.isBranch()){
 			Integer jumpPC = toDecode.getDadoImediato()*4 + IF.getPC();
 			if(toDecode.getNome().equals("ble"))
@@ -32,6 +33,7 @@ public class InstDecode {
 		else if(toDecode.isBranch()){
 			return buffer.getGuessPC(toDecode);
 		}
+		if(IF.getPC()==0 && toDecode==null) return 0;//POG clock = 0;
 		return IF.getPC()+4;
 	}
 	
@@ -44,5 +46,12 @@ public class InstDecode {
 	}
 	public void setPredictionBuffer(PredictionBuffer buf){
 		this.buffer = buf;
+	}
+	public void clean(){
+		this.toDecode=null;
+		this.decoded=null;
+	}
+	public Instrucao getDecodedInst(){
+		return decoded;
 	}
 }

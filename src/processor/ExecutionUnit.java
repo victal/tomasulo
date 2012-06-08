@@ -1,14 +1,12 @@
 package processor;
 
-import java.util.List;
+import instructions.Instrucao;
 
-import registers.Reg;
-//import reserve.ReserveStation;
 
 public interface ExecutionUnit {
 	
 	public void chooseStation();
 	public Integer runStep();
-	public List<Reg> getRegs();
-	
+	public void clean();
+	public void loadInst(Instrucao i);	
 }
