@@ -56,4 +56,9 @@ public class InstDecode {
 	public Instrucao getDecodedInst(){
 		return decoded;
 	}
+	public boolean isEmpty(){
+		boolean todec = toDecode==null || toDecode.getNome().equals("nop");
+		boolean decd = decoded==null || decoded.getNome().equals("nop");
+		return todec && decd;
+	}
 }

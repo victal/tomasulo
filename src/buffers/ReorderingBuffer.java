@@ -176,4 +176,12 @@ public class ReorderingBuffer {
 	public void setAdress(Integer dest, Integer value) {
 		buffer.get(dest).setAddress(value);
 	}
+	
+	public boolean isEmpty(){
+		for(ReorderingLine line:buffer){
+			if(line.isBusy() && line.getInst().getNome().equals("nop"))
+				return false;
+		}
+		return true;
+	}
 }

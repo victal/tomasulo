@@ -21,7 +21,7 @@ public class Main {
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,0);
-		while(true){
+		while(!p.isFinished()){
 			p.runStep();
 			System.err.println(p.getIF().getPC());
 		}

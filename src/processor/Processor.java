@@ -52,7 +52,23 @@ public class Processor {
 		i++;
 	}
 	
-	
+	public boolean isFinished(){
+		//IF
+		boolean IFDone = IF.getnextInst()==null;
+		IFDone = IFDone || memInst.get(IF.getPC())==null;
+		//ID
+		boolean IDDone = ID.isEmpty();
+		//ID buffer
+		boolean idBufferEmpty = idBuffer.isEmpty();
+		if(!idBufferEmpty)
+			for(Instrucao i:idBuffer){
+				if(!i.getNome().equals("nop"))
+					idBufferEmpty=false;
+			}
+		//Reorder => Exec Units também
+		boolean reorderEmpty = reorder.isEmpty();
+		return IFDone && IDDone && idBufferEmpty && reorderEmpty;
+	}
 	private void emitirInst() {
 		if(ID.getDecodedInst()!=null)
 			idBuffer.add(ID.getDecodedInst());
