@@ -39,22 +39,26 @@ public class ReorderingBuffer {
 	}
 	public void consolidate(List<Reg> regs){
 		ReorderingLine line = buffer.get(listinit);
-		System.err.println("Consolidating");
+		
 		if(line.getState()!=ReorderingLine.CONSOLIDAR){
-			System.err.println("not consolidating");
 			return;
-		}else{
+		}else{			
 			if(line.getDest()!=null){ //Operações da ULA e Loads
 				regs.get(line.getDest()).setValue(line.getValue());
 				regs.get(line.getDest()).setQi(null);
 			}
 			else{
 				Instrucao i = line.getInst();
+				System.err.println("Consolidating "+line.getInst().getNome());
 				if(i.isBranch()){ 
-
 					PredictionLine pl = pbuffer.getLine(i);
+					if(line.getValue()==null){
+						line.setValue(pl.getInstPC());
+					}
 					if(!pl.getGuessPC().equals(line.getValue())){//errou, apagar tudo
 						cleanAllInstructions(); 
+						if(line.getValue().equals(pl.getInstPC()))
+							line.setValue(line.getValue()+4);
 						p.getIF().setNewPC(line.getValue());
 					}
 					if(line.getValue().equals(pl.getInstPC())){
@@ -134,6 +138,7 @@ public class ReorderingBuffer {
 				index = i%ReorderingBuffer.SIZE;
 			}
 		}
+		if(index==listinit)return false;
 		endlist=false;
 		for(int i = listinit;i<index+ReorderingBuffer.SIZE&&!endlist;i++){
 			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
@@ -153,8 +158,9 @@ public class ReorderingBuffer {
 				index = i%ReorderingBuffer.SIZE;
 			}
 		}
+		if(index==listinit)return false;
 		endlist=false;
-		for(int i = listinit;i<index+ReorderingBuffer.SIZE&&!endlist;i++){
+		for(int i = index+1;i<index+ReorderingBuffer.SIZE&&!endlist;i++){
 			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
 			else {
 				String nome = buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome();

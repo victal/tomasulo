@@ -78,12 +78,22 @@ public class AddExecUnit implements ExecutionUnit {
 	public void chooseStation(){
 		if(current == null){
 			for (ReserveStation r:stations){
-				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
-					System.err.println(r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
+				if(r.getInstrucao()!=null)
+					System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
+				if(r.isBusy() && r.getQj()==null && r.getQk()==null && !r.getInstrucao().getALUOp().equals("nop")){
 					current=r;
 					return;
 				}
 			}
+			for (ReserveStation r:stations){
+				if(r.getInstrucao()!=null)
+					System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
+				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
+					current=r;
+					return;
+				}
+			}
+			
 		}
 	}
 	public void loadInst(Instrucao i){
@@ -91,6 +101,7 @@ public class AddExecUnit implements ExecutionUnit {
 		for(int j =0;j<AddExecUnit.numStations;j++){
 			if(!stations.get(j).isBusy())numStation=j;
 		}
+		stations.get(numStation).clean();
 		stations.get(numStation).load(i);
 	}
 	

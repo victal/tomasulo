@@ -40,7 +40,7 @@ public class Processor {
 		/* Execução e colocação no reorderingBuffer */
 		
 		multiplier.runStep();
-		
+
 		memUnit.runStep();
 		
 		adder.runStep();
