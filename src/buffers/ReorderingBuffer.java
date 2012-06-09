@@ -39,9 +39,11 @@ public class ReorderingBuffer {
 	}
 	public void consolidate(List<Reg> regs){
 		ReorderingLine line = buffer.get(listinit);
-		if(line.getState()!=ReorderingLine.CONSOLIDAR)
+		System.err.println("Consolidating");
+		if(line.getState()!=ReorderingLine.CONSOLIDAR){
+			System.err.println("not consolidating");
 			return;
-		else{
+		}else{
 			if(line.getDest()!=null){ //Operações da ULA e Loads
 				regs.get(line.getDest()).setValue(line.getValue());
 				regs.get(line.getDest()).setQi(null);
@@ -49,6 +51,7 @@ public class ReorderingBuffer {
 			else{
 				Instrucao i = line.getInst();
 				if(i.isBranch()){ 
+
 					PredictionLine pl = pbuffer.getLine(i);
 					if(!pl.getGuessPC().equals(line.getValue())){//errou, apagar tudo
 						cleanAllInstructions(); 

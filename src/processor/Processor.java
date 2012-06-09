@@ -31,10 +31,10 @@ public class Processor {
 	int i =0;
 	public void runStep(){
 		/*IF e ID*/
-		System.err.println("clock "+i);
+		System.err.println(i);
 		ID.decodeInst(); 
 		IF.setNewPC(ID.getNewPC());
-		System.err.println("antes da emissão");
+		System.err.println("emissão");
 		emitirInst();// Coloca no Buffer de Reordenação tbm;
 		System.err.println("depois da emissão");
 		/* Execução e colocação no reorderingBuffer */

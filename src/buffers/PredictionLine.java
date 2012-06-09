@@ -14,7 +14,7 @@ public class PredictionLine {
 	}
 
 	public Integer getGuessPC() {
-		return preditor.shallJump() ? jumpPC : instPC;
+		return preditor.shallJump() ? jumpPC : instPC+4;
 	}
 	public Integer getInstPC(){
 		return instPC;

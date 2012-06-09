@@ -55,15 +55,17 @@ public class AddExecUnit implements ExecutionUnit {
 				result = current.getA();
 			else if(inst.isBranch()){
 				if(inst.getNome().equals("ble")){
-					if(result<0)result = null;
+					System.err.println("ble");
+					if(result>0)result = null;
 					else result = current.getA();
+					System.err.println("result "+result);
 				}
 				if(inst.getNome().equals("bne")){
-					if(result!=0)result = null;
+					if(result==0)result = null;
 					else result = current.getA();
 				}
 				if(inst.getNome().equals("beq")){
-					if(result==0) result = null;
+					if(result!=0) result = null;
 					else result = current.getA();
 				}
 			}
@@ -77,7 +79,7 @@ public class AddExecUnit implements ExecutionUnit {
 		if(current == null){
 			for (ReserveStation r:stations){
 				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
-					System.err.println(r.getInstrucao().toString() + " "+r.getDest());
+					System.err.println(r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
 					current=r;
 					return;
 				}
