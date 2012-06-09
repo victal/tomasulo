@@ -20,7 +20,7 @@ public class Main {
 		File f = new File("teste.dat");
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
-		Processor p = ProcessorBuilder.build(meminst, memdados);
+		Processor p = ProcessorBuilder.build(meminst, memdados,0);
 	}
 	
 	public static List<String> lerInstrucoes(File f) {

@@ -8,8 +8,8 @@ import processor.ExecutionUnit;
 import buffers.ReorderingBuffer;
 
 public class CommonBus {
-	private List<ExecutionUnit> execUnits;
-	private ReorderingBuffer buffer;
+	private List<ExecutionUnit> execUnits;//OK
+	private ReorderingBuffer buffer;//OK
 	private boolean busy = false;
 	
 	public boolean isBusy(){
@@ -26,5 +26,11 @@ public class CommonBus {
 			}
 		}
 		buffer.store(reorderIndex,value);
+	}
+	public void setExecutionUnits(List<ExecutionUnit> eu) {
+		this.execUnits=eu;
+	}
+	public void setReorder(ReorderingBuffer rbuf){
+		this.buffer = rbuf;
 	}
 }

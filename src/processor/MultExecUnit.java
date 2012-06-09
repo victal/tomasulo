@@ -5,6 +5,7 @@ import instructions.Instrucao;
 import java.util.ArrayList;
 import java.util.List;
 
+import registers.Reg;
 import reserve.ReserveStation;
 import buffers.ReorderingBuffer;
 import buffers.ReorderingLine;
@@ -13,16 +14,18 @@ import circuits.CommonBus;
 public class MultExecUnit implements ExecutionUnit {
 
 	private static final Integer numStations = 5;
-	private List<ReserveStation> stations;
+	private List<ReserveStation> stations;//OK
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
-	private ReorderingBuffer reorder;
-	private CommonBus bus;
+	private ReorderingBuffer reorder;//OK
+	private CommonBus bus;//OK
 	
 	public MultExecUnit(){
 		this.stations = new ArrayList<ReserveStation>();
 		for(int i = 0;i<MultExecUnit.numStations;i++){
-			stations.add(new ReserveStation());
+			ReserveStation rs = new ReserveStation();
+			rs.setExecUnit(this);
+			stations.add(rs);
 		}
 	}
 	
@@ -30,8 +33,9 @@ public class MultExecUnit implements ExecutionUnit {
 	public void chooseStation() {
 		if(current == null){
 			for (ReserveStation r:stations){
-				if(r.isBusy()){
+				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
 					current=r;
+					return;
 				}
 			}
 		}
@@ -100,5 +104,17 @@ public class MultExecUnit implements ExecutionUnit {
 			if(!rs.isBusy()) return false;
 		}
 		return true;
+	}
+	
+	public void setRegs(List<Reg> regs){
+		for(ReserveStation rs:stations){
+			rs.setRegs(regs);
+		}
+	}
+	public void setBus(CommonBus b){
+		this.bus=b;
+	}
+	public void setReorder(ReorderingBuffer r) {
+		this.reorder=r;
 	}
 }

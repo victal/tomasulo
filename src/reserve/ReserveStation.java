@@ -12,8 +12,8 @@ import buffers.ReorderingLine;
 
 public class ReserveStation {
 
-	private ExecutionUnit eu;
-	private List<Reg> regs;
+	private ExecutionUnit eu;//OK
+	private List<Reg> regs;//OK
 	private Instrucao instrucao;
 	private Integer qj, qk; //tudo em relação ao buffer de reordenação
 	private Integer vj, vk;
@@ -113,5 +113,8 @@ public class ReserveStation {
 	}
 	public Integer getA(){
 		return A;
+	}
+	public void setExecUnit(ExecutionUnit eu){
+		this.eu=eu;
 	}
 }

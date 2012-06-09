@@ -14,16 +14,18 @@ import circuits.CommonBus;
 public class AddExecUnit implements ExecutionUnit {
 	
 	private static final Integer numStations = 3;
-	private List<ReserveStation> stations;
+	private List<ReserveStation> stations;//OK
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
-	private ReorderingBuffer reorder;
-	private CommonBus bus;
+	private ReorderingBuffer reorder;//OK
+	private CommonBus bus;//OK
 	
 	public AddExecUnit(){
 		this.stations = new ArrayList<ReserveStation>();
 		for(int i = 0;i<AddExecUnit.numStations;i++){
-			stations.add(new ReserveStation());
+			ReserveStation rs = new ReserveStation();
+			rs.setExecUnit(this);
+			stations.add(rs);
 		}
 	}
 	
@@ -71,8 +73,9 @@ public class AddExecUnit implements ExecutionUnit {
 	public void chooseStation(){
 		if(current == null){
 			for (ReserveStation r:stations){
-				if(r.isBusy()){
+				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
 					current=r;
+					return;
 				}
 			}
 		}
@@ -121,6 +124,15 @@ public class AddExecUnit implements ExecutionUnit {
 			if(!rs.isBusy()) return false;
 		}
 		return true;
+	}
+
+	public void setBus(CommonBus b) {
+		this.bus=b;
+		
+	}
+
+	public void setReorder(ReorderingBuffer r) {
+		this.reorder=r;
 	}
 
 }

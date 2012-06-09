@@ -29,13 +29,39 @@ public class ProcessorBuilder {
 		return p;
 	}
 	
-//	private static void buildExecUnitsandBus(Processor p) {
-//		AddExecUnit add = new AddExecUnit();
-//		MultExecUnit mult = new MultExecUnit();
-//		MemExecUnit mem = new MemExecUnit();
-//		CommonBus bus =new CommonBus();
-//		
-//	}
+	private static void buildExecUnitsandBus(Processor p) {
+		AddExecUnit add = new AddExecUnit();
+		MultExecUnit mult = new MultExecUnit();
+		MemExecUnit mem = new MemExecUnit();
+		CommonBus bus =new CommonBus();
+		
+		List<ExecutionUnit> eu = new ArrayList<ExecutionUnit>();
+		eu.add(add);
+		eu.add(mult);
+		eu.add(mem);
+		bus.setExecutionUnits(eu);
+		bus.setReorder(p.getReorder());
+		
+		add.setRegs(p.getRegs());
+		mult.setRegs(p.getRegs());
+		mem.setRegs(p.getRegs());
+		
+		add.setBus(bus);
+		mem.setBus(bus);
+		mult.setBus(bus);
+		
+		add.setReorder(p.getReorder());
+		mult.setReorder(p.getReorder());
+		mem.setReorder(p.getReorder());
+		
+		mem.setDataMem(p.getDataMemory());
+		
+		p.setBus(bus);
+		p.setAddEU(add);
+		p.setMultEU(mult);
+		p.setMemEU(mem);
+		
+	}
 
 	private static List<Reg> buildRegs() {
 		List<Reg> regs = new ArrayList<Reg>();

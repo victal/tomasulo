@@ -122,5 +122,24 @@ public class Processor {
 		memUnit.clean();
 		multiplier.clean();
 		adder.clean();
+		for(Reg r:regs){
+			r.setQi(null);
+		}
+		idBuffer.clear();
+	}
+
+
+	public void setMemEU(MemExecUnit mem) {
+		this.memUnit=mem;
+	}
+
+
+	public void setMultEU(MultExecUnit mult) {
+		this.multiplier=mult;
+	}
+
+
+	public void setAddEU(AddExecUnit add) {
+		this.adder=add;
 	}
 }

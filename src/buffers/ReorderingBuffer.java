@@ -72,8 +72,8 @@ public class ReorderingBuffer {
 	}
 
 	private void cleanAllInstructions() {
-		for(int i = listinit;i<listinit+SIZE;i++){
-			buffer.get(i).setFree();
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
+			buffer.get(i%ReorderingBuffer.SIZE).setFree();
 		}
 		p.getID().clean();
 		p.cleanExecutionUnits();
@@ -93,9 +93,9 @@ public class ReorderingBuffer {
 		this.p = p;
 	}
 	public void updateState(Instrucao inst, Integer state){
-		for(int i = listinit;i<listinit+SIZE;i++){
-			if(buffer.get(i).getInst().equals(inst)){
-				buffer.get(i).setState(state);
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+				buffer.get(i%ReorderingBuffer.SIZE).setState(state);
 			}
 		}
 	}
@@ -104,6 +104,9 @@ public class ReorderingBuffer {
 	}
 	public Integer getValue(Integer i){
 		return buffer.get(i).getValue();
+	}
+	public List<ReorderingLine> getLines(){
+		return buffer;
 	}
 
 
@@ -116,5 +119,41 @@ public class ReorderingBuffer {
 		else line.setValue(value);
 		line.setState(ReorderingLine.CONSOLIDAR);
 		
+	}
+
+
+	public boolean hasStoreBefore(Instrucao inst) {
+		Integer index = listinit;
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+				index = i%ReorderingBuffer.SIZE;
+			}
+		}
+		for(int i = listinit;i<index+ReorderingBuffer.SIZE;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome().equals("sw"))
+				return true;
+		}
+		return false;
+	}
+
+
+	public boolean hasMemInstBefore(Instrucao inst) {
+		Integer index = listinit;
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+				index = i%ReorderingBuffer.SIZE;
+			}
+		}
+		for(int i = listinit;i<index+ReorderingBuffer.SIZE;i++){
+			String nome = buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome();
+			if(nome.equals("sw")||nome.equals("lw"))
+				return true;
+		}
+		return false;
+	}
+
+
+	public void setAdress(Integer dest, Integer value) {
+		buffer.get(dest).setAddress(value);
 	}
 }
