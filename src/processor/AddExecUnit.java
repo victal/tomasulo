@@ -30,6 +30,8 @@ public class AddExecUnit implements ExecutionUnit {
 	}
 	
 	public void runStep() {
+		this.chooseStation();
+		if(current==null)return;
 		if(currentNumClocks<current.getInstrucao().getDuration()){
 			currentNumClocks++;
 			return;

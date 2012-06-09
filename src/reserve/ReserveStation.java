@@ -46,7 +46,7 @@ public class ReserveStation {
 		List<Integer> regslidos = i.getRegistradoresLidos();
 		
 		if(regslidos.size()>0){//add, mul, sub, div, branches,lw
-			if(regs.get(regslidos.get(0)).getQi()!=0){
+			if(regs.get(regslidos.get(0)).getQi()!=null){
 				if(reorder.getState(regs.get(regslidos.get(0)).getQi())==ReorderingLine.CONSOLIDAR)
 					this.vj = reorder.getValue(regs.get(regslidos.get(0)).getQi());
 				else this.qj = regs.get(regslidos.get(0)).getQi();
@@ -54,7 +54,7 @@ public class ReserveStation {
 			else this.vj = regs.get(regslidos.get(0)).getValue();
 		}
 		if(regslidos.size()==2){
-			if(regs.get(regslidos.get(1)).getQi()!=0){
+			if(regs.get(regslidos.get(1)).getQi()!=null){
 				if(reorder.getState(regs.get(regslidos.get(1)).getQi())==ReorderingLine.CONSOLIDAR)
 					this.vk = reorder.getValue(regs.get(regslidos.get(1)).getQi());
 				else this.qk = regs.get(regslidos.get(1)).getQi();

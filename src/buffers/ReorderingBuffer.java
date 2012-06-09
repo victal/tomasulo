@@ -96,6 +96,7 @@ public class ReorderingBuffer {
 		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
 			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
 				buffer.get(i%ReorderingBuffer.SIZE).setState(state);
+				return;
 			}
 		}
 	}

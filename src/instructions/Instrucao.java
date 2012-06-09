@@ -33,7 +33,7 @@ public class Instrucao implements IInstrucao {
 
 		Object instrucaoObjeto = null;
 		try {
-			Class klass = Class.forName("instrucoes." + className);
+			Class klass = Class.forName("instructions." + className);
 			Constructor ctor = klass.getConstructor(String.class);
 			instrucaoObjeto = ctor.newInstance(new Object[] {instrucao});
 		} catch (ClassNotFoundException e) {

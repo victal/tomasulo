@@ -28,6 +28,7 @@ public class InstDecode {
 		this.decoded = this.toDecode;
 	}
 	public Integer getNewPC(){
+		if(toDecode==null)return IF.getPC()+4;
 		if(toDecode.isJump()){
 			return toDecode.getDadoImediato();
 		}

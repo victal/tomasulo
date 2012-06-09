@@ -17,10 +17,14 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		File f = new File("teste.dat");
+		File f = new File("teste.mips");
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,0);
+		while(true){
+			p.runStep();
+			System.out.println(p.getIF().getPC());
+		}
 	}
 	
 	public static List<String> lerInstrucoes(File f) {

@@ -43,6 +43,8 @@ public class MultExecUnit implements ExecutionUnit {
 
 	@Override
 	public void runStep() {
+		this.chooseStation();
+		if(current==null)return;
 		if(currentNumClocks<current.getInstrucao().getDuration()){
 			currentNumClocks++;
 			return;

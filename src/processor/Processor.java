@@ -39,13 +39,10 @@ public class Processor {
 		
 		/* Execução e colocação no reorderingBuffer */
 		
-		multiplier.chooseStation();
 		multiplier.runStep();
 		
-		memUnit.chooseStation();
 		memUnit.runStep();
 		
-		adder.chooseStation();
 		adder.runStep();
 
 		//Executar instruções nas unidades de execução (A Unidade se encarrega de pegar uma instrução da estação de reserva  
@@ -56,9 +53,10 @@ public class Processor {
 	
 	
 	private void emitirInst() {
-		idBuffer.add(ID.getDecodedInst());
+		if(ID.getDecodedInst()!=null)
+			idBuffer.add(ID.getDecodedInst());
+		if(idBuffer.isEmpty())return;
 		Instrucao i = idBuffer.get(0);
-		if(i==null)return;
 		String inome = i.getNome();
 		if(inome.equals("mul")||inome.equals("div")){
 			if(!multiplier.isFull()){
@@ -78,7 +76,7 @@ public class Processor {
 				idBuffer.remove(0);
 			}
 		}
-		if(!i.equals(idBuffer.get(0)))reorder.updateState(i,ReorderingLine.EMITIDA);
+		if(idBuffer.isEmpty()||!i.equals(idBuffer.get(0)))reorder.updateState(i,ReorderingLine.EMITIDA);
 	}
 
 
