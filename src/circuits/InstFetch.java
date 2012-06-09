@@ -5,7 +5,7 @@ import instructions.Instrucao;
 import memorias.MemoriaInstrucao;
 
 public class InstFetch {
-	private MemoriaInstrucao mem;
+	private MemoriaInstrucao mem;//OK
 	private int pc;
 	
 	public InstFetch() {

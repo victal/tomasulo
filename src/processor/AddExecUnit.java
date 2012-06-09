@@ -5,11 +5,11 @@ import instructions.Instrucao;
 import java.util.ArrayList;
 import java.util.List;
 
-import buffers.ReorderingBuffer;
-import buffers.ReorderingLine;
-
 import registers.Reg;
 import reserve.ReserveStation;
+import buffers.ReorderingBuffer;
+import buffers.ReorderingLine;
+import circuits.CommonBus;
 
 public class AddExecUnit implements ExecutionUnit {
 	
@@ -17,8 +17,8 @@ public class AddExecUnit implements ExecutionUnit {
 	private List<ReserveStation> stations;
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
-	private List<Reg> regs;
 	private ReorderingBuffer reorder;
+	private CommonBus bus;
 	
 	public AddExecUnit(){
 		this.stations = new ArrayList<ReserveStation>();
@@ -32,22 +32,41 @@ public class AddExecUnit implements ExecutionUnit {
 			currentNumClocks++;
 			return;
 		}
-		else{
+		else {
 			String op = current.getInstrucao().getALUOp();
-			Integer result;
+			Integer result=null;
 			if(op.equals("sub")){
 				result = current.getVj()-current.getVk();
 			}
 			else if(op.equals("add")){
 				result = current.getVj()+current.getVk();
 			}
-			else if(op.equals("nop")){
-				
-			}
+			reorder.updateState(current.getInstrucao(), ReorderingLine.GRAVAR);
+			
+			if(bus.isBusy()) return;
+			
 			Integer dest = current.getDest();
-			//putInBus()
-			//current=null;
+			Instrucao inst = current.getInstrucao();
+			if(inst.isJump())
+				result = current.getA();
+			else if(inst.isBranch()){
+				if(inst.getNome().equals("ble")){
+					if(result<0)result = null;
+					else result = current.getA();
+				}
+				if(inst.getNome().equals("bne")){
+					if(result!=0)result = null;
+					else result = current.getA();
+				}
+				if(inst.getNome().equals("beq")){
+					if(result==0) result = null;
+					else result = current.getA();
+				}
+			}
+			bus.sendData(inst, dest, result);
+			current=null;
 		}
+		
 	}
 	public void chooseStation(){
 		if(current == null){
@@ -67,7 +86,6 @@ public class AddExecUnit implements ExecutionUnit {
 	}
 	
 	public void setRegs(List<Reg> regs){
-		this.regs=regs;
 		for(ReserveStation rs:stations){
 			rs.setRegs(regs);
 		}
@@ -83,6 +101,26 @@ public class AddExecUnit implements ExecutionUnit {
 		}
 		current = null;
 		currentNumClocks=1;
+	}
+	public void updateStations(Integer reorderIndex, Integer value){
+		for(ReserveStation rs:stations){
+			if(rs.getQj()==reorderIndex){
+				rs.setQj(null);
+				rs.setVj(value);
+			}
+			if(rs.getQk()==reorderIndex){
+				rs.setQk(null);
+				rs.setVk(value);
+			}
+		}
+	}
+
+	@Override
+	public boolean isFull() {
+		for(ReserveStation rs:stations){
+			if(!rs.isBusy()) return false;
+		}
+		return true;
 	}
 
 }

@@ -3,7 +3,7 @@ package processor;
 import instructions.Instrucao;
 import buffers.ReorderingBuffer;
 
-public class MultExecutionUnit implements ExecutionUnit {
+public class MemExecUnit implements ExecutionUnit {
 
 	@Override
 	public void chooseStation() {
@@ -33,6 +33,18 @@ public class MultExecutionUnit implements ExecutionUnit {
 	public ReorderingBuffer getReorder() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void updateStations(Integer reorderIndex, Integer value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isFull() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

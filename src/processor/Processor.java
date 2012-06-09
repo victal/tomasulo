@@ -2,6 +2,7 @@ package processor;
 
 import instructions.Instrucao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import memorias.MemoriaDados;
@@ -9,21 +10,24 @@ import memorias.MemoriaInstrucao;
 import registers.Reg;
 import buffers.ReorderingBuffer;
 import buffers.ReorderingLine;
+import circuits.CommonBus;
 import circuits.InstDecode;
 import circuits.InstFetch;
 
 public class Processor {
 	
 	
-	private List<Reg> regs;
+	private List<Reg> regs;//OK
 	private AddExecUnit adder;
-//	private List<AddExecUnit> adders;
-//	private List<MultExecUnit> multipliers;
+	private MultExecUnit multiplier;
+	private MemExecUnit memUnit;
 	private ReorderingBuffer reorder;
-	private MemoriaDados memData;
-	private MemoriaInstrucao memInst;
-	private InstFetch IF;
-	private InstDecode ID;
+	private MemoriaDados memData;//OK
+	private MemoriaInstrucao memInst;//OK
+	private InstFetch IF;//OK
+	private InstDecode ID;//OK
+	private CommonBus bus;
+	private List<Instrucao> idBuffer = new ArrayList<Instrucao>();
 	
 	public void runStep(){
 		/*IF e ID*/
@@ -34,29 +38,47 @@ public class Processor {
 		emitirInst();
 		
 		/* Execução e colocação no reorderingBuffer */
-		//for i in  execution units
-		// i.choosestation
-		// i.runstep()
+		
+		multiplier.chooseStation();
+		multiplier.runStep();
+		
+		memUnit.chooseStation();
+		memUnit.runStep();
+		
+		adder.chooseStation();
+		adder.runStep();
+
 		//Executar instruções nas unidades de execução (A Unidade se encarrega de pegar uma instrução da estação de reserva  
 		reorder.consolidate(regs);//pode alterar o PC
 		ID.putNextInst(IF.getnextInst());
+		bus.unsetBusy();
 	}
 	
 	
 	private void emitirInst() {
-		Instrucao i = ID.getDecodedInst();
+		idBuffer.add(ID.getDecodedInst());
+		Instrucao i = idBuffer.get(0);
+		if(i==null)return;
 		String inome = i.getNome();
 		if(inome.equals("mul")||inome.equals("div")){
-			//put in MulExecUnit
+			if(!multiplier.isFull()){
+				multiplier.loadInst(i);
+				idBuffer.remove(0);
+			}
 		}
 		else if(inome.equals("lw")||inome.equals("sw")){
-			//put in MemExecUnit
+			if(!memUnit.isFull()){
+				memUnit.loadInst(i);
+				idBuffer.remove(0);
+			}
 		}
 		else{
-			//put in AddExecUnit
+			if(!adder.isFull()){
+				adder.loadInst(i);
+				idBuffer.remove(0);
+			}
 		}
-		reorder.updateState(i,ReorderingLine.EMITIDA);
-		
+		if(!i.equals(idBuffer.get(0)))reorder.updateState(i,ReorderingLine.EMITIDA);
 	}
 
 
@@ -93,5 +115,12 @@ public class Processor {
 	public InstDecode getID(){
 		return ID;
 	}
-	public void cleanExecutionUnits(){asjdlgfhaodslkfhdslkf;}
+	public void setBus(CommonBus bus){
+		this.bus=bus;
+	}
+	public void cleanExecutionUnits(){
+		memUnit.clean();
+		multiplier.clean();
+		adder.clean();
+	}
 }

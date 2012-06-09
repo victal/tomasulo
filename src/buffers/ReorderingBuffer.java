@@ -12,11 +12,12 @@ import registers.Reg;
 public class ReorderingBuffer {
 	public static final Integer SIZE = 20;
 
-	private Processor p;
-	private List<ReorderingLine> buffer;
-	private MemoriaDados md;
-	private Integer listinit;
-	private PredictionBuffer pbuffer;
+	private Processor p;//OK
+	private List<ReorderingLine> buffer;//OK
+	private MemoriaDados md;//OK
+	private Integer listinit;//OK
+	private PredictionBuffer pbuffer;//OK
+	
 	public ReorderingBuffer(){
 		buffer = new ArrayList<ReorderingLine>();
 		for(int i = 0;i<ReorderingBuffer.SIZE;i++){
@@ -103,5 +104,17 @@ public class ReorderingBuffer {
 	}
 	public Integer getValue(Integer i){
 		return buffer.get(i).getValue();
+	}
+
+
+	public void store(Integer reorderIndex, Integer value) {
+		ReorderingLine line = buffer.get(reorderIndex);
+		
+		if(line.getInst().isBranch()&&value==null){
+			line.setValue(pbuffer.getLine(line.getInst()).getInstPC());
+		}
+		else line.setValue(value);
+		line.setState(ReorderingLine.CONSOLIDAR);
+		
 	}
 }

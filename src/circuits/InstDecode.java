@@ -7,10 +7,11 @@ import buffers.PredictionBuffer;
 public class InstDecode {
 //Former IDCircuit
 	
-	private PredictionBuffer buffer;
+	private PredictionBuffer buffer;//OK
+	private InstFetch IF;//OK
 	private Instrucao toDecode;
 	private Instrucao decoded;
-	private InstFetch IF;
+	
 	
 	public InstDecode(){
 		this.toDecode = null;

@@ -11,4 +11,6 @@ public interface ExecutionUnit {
 	public void clean();
 	public void loadInst(Instrucao i);
 	public ReorderingBuffer getReorder();
+	public void updateStations(Integer reorderIndex, Integer value);
+	public boolean isFull();
 }

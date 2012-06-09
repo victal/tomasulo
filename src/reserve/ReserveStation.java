@@ -99,4 +99,19 @@ public class ReserveStation {
 		dest=null;
 		instrucao = null;
 	}
+	public void setQj(Integer i){
+		qj=i;
+	}
+	public void setQk(Integer i){
+		qk=i;
+	}
+	public void setVj(Integer i){
+		vj=i;
+	}
+	public void setVk(Integer i){
+		vk=i;
+	}
+	public Integer getA(){
+		return A;
+	}
 }
