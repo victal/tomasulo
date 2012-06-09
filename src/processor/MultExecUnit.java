@@ -61,6 +61,7 @@ public class MultExecUnit implements ExecutionUnit {
 		if(bus.isBusy()) return;
 		Integer dest = current.getDest();
 		bus.sendData(current.getInstrucao(), dest, result);
+		current.unsetBusy();
 		current=null;
 	}
 

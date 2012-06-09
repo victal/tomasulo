@@ -28,15 +28,15 @@ public class Processor {
 	private InstDecode ID;//OK
 	private CommonBus bus;
 	private List<Instrucao> idBuffer = new ArrayList<Instrucao>();
-	
+	int i =0;
 	public void runStep(){
 		/*IF e ID*/
-		
-		ID.decodeInst(); // Coloca no Buffer de Reordenação tbm;
+		System.err.println("clock "+i);
+		ID.decodeInst(); 
 		IF.setNewPC(ID.getNewPC());
-
-		emitirInst();
-		
+		System.err.println("antes da emissão");
+		emitirInst();// Coloca no Buffer de Reordenação tbm;
+		System.err.println("depois da emissão");
 		/* Execução e colocação no reorderingBuffer */
 		
 		multiplier.runStep();
@@ -49,6 +49,7 @@ public class Processor {
 		reorder.consolidate(regs);//pode alterar o PC
 		ID.putNextInst(IF.getnextInst());
 		bus.unsetBusy();
+		i++;
 	}
 	
 	

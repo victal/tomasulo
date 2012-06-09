@@ -68,6 +68,7 @@ public class AddExecUnit implements ExecutionUnit {
 				}
 			}
 			bus.sendData(inst, dest, result);
+			current.unsetBusy();
 			current=null;
 		}
 		
@@ -76,6 +77,7 @@ public class AddExecUnit implements ExecutionUnit {
 		if(current == null){
 			for (ReserveStation r:stations){
 				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
+					System.err.println(r.getInstrucao().toString() + " "+r.getDest());
 					current=r;
 					return;
 				}

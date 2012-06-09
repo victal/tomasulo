@@ -23,7 +23,7 @@ public class Main {
 		Processor p = ProcessorBuilder.build(meminst, memdados,0);
 		while(true){
 			p.runStep();
-			System.out.println(p.getIF().getPC());
+			System.err.println(p.getIF().getPC());
 		}
 	}
 	

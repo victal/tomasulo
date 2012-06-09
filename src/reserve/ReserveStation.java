@@ -63,13 +63,14 @@ public class ReserveStation {
 		}
 		if(i.getNome().equals("addi"))
 			this.vk = i.getDadoImediato();
-		else if(i.getNome().equals("sw"))
+		else if(i.getNome().equals("sw")||i.getNome().equals("lw"))
 			this.A = i.getDadoImediato();
 		if(i.isBranch()||i.isJump()){
 			this.A = i.getDadoImediato();
 		}
 		this.dest = reorder.loadFirstEmpty(i);
-		regs.get(i.getRegistradorEscrito()).setQi(dest);
+		if(i.getRegistradorEscrito()!=null) //Stores, nops, jumps e branches
+			regs.get(i.getRegistradorEscrito()).setQi(dest);
 	} 
 	public void setRegs(List<Reg> regs){
 		this.regs = regs;
@@ -116,5 +117,8 @@ public class ReserveStation {
 	}
 	public void setExecUnit(ExecutionUnit eu){
 		this.eu=eu;
+	}
+	public void unsetBusy(){
+		this.busy=false;
 	}
 }

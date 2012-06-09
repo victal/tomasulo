@@ -113,7 +113,6 @@ public class ReorderingBuffer {
 
 	public void store(Integer reorderIndex, Integer value) {
 		ReorderingLine line = buffer.get(reorderIndex);
-		
 		if(line.getInst().isBranch()&&value==null){
 			line.setValue(pbuffer.getLine(line.getInst()).getInstPC());
 		}
@@ -125,13 +124,17 @@ public class ReorderingBuffer {
 
 	public boolean hasStoreBefore(Instrucao inst) {
 		Integer index = listinit;
-		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
-			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+		boolean endlist=false;
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE&&!endlist;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
+			else if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
 				index = i%ReorderingBuffer.SIZE;
 			}
 		}
-		for(int i = listinit;i<index+ReorderingBuffer.SIZE;i++){
-			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome().equals("sw"))
+		endlist=false;
+		for(int i = listinit;i<index+ReorderingBuffer.SIZE&&!endlist;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
+			else if(buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome().equals("sw"))
 				return true;
 		}
 		return false;
@@ -140,15 +143,22 @@ public class ReorderingBuffer {
 
 	public boolean hasMemInstBefore(Instrucao inst) {
 		Integer index = listinit;
-		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
-			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+		boolean endlist=false;
+		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE&&!endlist;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
+			else if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
 				index = i%ReorderingBuffer.SIZE;
 			}
 		}
-		for(int i = listinit;i<index+ReorderingBuffer.SIZE;i++){
-			String nome = buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome();
-			if(nome.equals("sw")||nome.equals("lw"))
-				return true;
+		endlist=false;
+		for(int i = listinit;i<index+ReorderingBuffer.SIZE&&!endlist;i++){
+			if(buffer.get(i%ReorderingBuffer.SIZE).getInst()==null) endlist=true;
+			else {
+				String nome = buffer.get(i%ReorderingBuffer.SIZE).getInst().getNome();
+				if(nome.equals("sw")||nome.equals("lw"))
+					return true;
+			}
+			
 		}
 		return false;
 	}
