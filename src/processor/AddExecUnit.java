@@ -151,5 +151,9 @@ public class AddExecUnit implements ExecutionUnit {
 	public void setReorder(ReorderingBuffer r) {
 		this.reorder=r;
 	}
+	
+	public List<ReserveStation> getStations(){
+		return stations;
+	}
 
 }

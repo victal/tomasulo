@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+
 import memorias.MemBuilder;
 import memorias.MemoriaDados;
 import memorias.MemoriaInstrucao;
 import processor.Processor;
 import processor.ProcessorBuilder;
 
-public class Main {
+public class Utils {
 
 	public static void main(String[] args) {
 
@@ -21,10 +24,16 @@ public class Main {
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,0);
-		while(!p.isFinished()){
-			p.runStep();
-			System.err.println(p.getIF().getPC());
-		}
+//		while(!p.isFinished()){
+//			p.runStep();
+//			System.err.println(p.getIF().getPC());
+//		}
+	}
+	public static Processor buildProcessor(File f, Integer num){
+		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
+		MemoriaDados memdados = new MemoriaDados();
+		Processor p = ProcessorBuilder.build(meminst, memdados,num);
+		return p;
 	}
 	
 	public static List<String> lerInstrucoes(File f) {
@@ -42,4 +51,23 @@ public class Main {
 		return res;
 	}
 
+	public static File chooseFile(){
+		JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "Mips binary files";
+			}
+			public boolean accept(File arg0) {
+				return arg0.getName().matches(".*[.]mips")||arg0.isDirectory();
+			}
+		});
+		fc.showOpenDialog(null);
+		File f;
+		if(fc.getSelectedFile()!=null){
+			f = fc.getSelectedFile();
+		}
+		else  f = new File("resources/teste.mips");
+		
+		return f;
+	}
 }

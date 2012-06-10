@@ -14,7 +14,7 @@ import buffers.ReorderingLine;
 
 public class MemExecUnit implements ExecutionUnit {
 	
-	private static final Integer numStations = 3;
+	private static final Integer numStations = 4;
 	private List<ReserveStation> stations;//OK
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
@@ -135,5 +135,9 @@ public class MemExecUnit implements ExecutionUnit {
 
 	public void setDataMem(MemoriaDados dataMemory) {
 		this.mem=dataMemory;
+	}
+	
+	public List<ReserveStation> getStations(){
+		return stations;
 	}
 }

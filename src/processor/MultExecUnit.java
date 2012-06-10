@@ -13,7 +13,7 @@ import circuits.CommonBus;
 
 public class MultExecUnit implements ExecutionUnit {
 
-	private static final Integer numStations = 5;
+	private static final Integer numStations = 4;
 	private List<ReserveStation> stations;//OK
 	private ReserveStation current = null;
 	private int currentNumClocks = 1;
@@ -119,5 +119,9 @@ public class MultExecUnit implements ExecutionUnit {
 	}
 	public void setReorder(ReorderingBuffer r) {
 		this.reorder=r;
+	}
+	
+	public List<ReserveStation> getStations(){
+		return stations;
 	}
 }

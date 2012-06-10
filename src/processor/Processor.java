@@ -8,6 +8,7 @@ import java.util.List;
 import memorias.MemoriaDados;
 import memorias.MemoriaInstrucao;
 import registers.Reg;
+import reserve.ReserveStation;
 import buffers.ReorderingBuffer;
 import buffers.ReorderingLine;
 import circuits.CommonBus;
@@ -28,10 +29,10 @@ public class Processor {
 	private InstDecode ID;//OK
 	private CommonBus bus;
 	private List<Instrucao> idBuffer = new ArrayList<Instrucao>();
-	int i =0;
+	private Integer clock =0;
+	
 	public void runStep(){
 		/*IF e ID*/
-		System.err.println(i);
 		ID.decodeInst(); 
 		IF.setNewPC(ID.getNewPC());
 		System.err.println("emissão");
@@ -49,7 +50,7 @@ public class Processor {
 		reorder.consolidate(regs);//pode alterar o PC
 		ID.putNextInst(IF.getnextInst());
 		bus.unsetBusy();
-		i++;
+		clock++;
 	}
 	
 	public boolean isFinished(){
@@ -156,5 +157,16 @@ public class Processor {
 
 	public void setAddEU(AddExecUnit add) {
 		this.adder=add;
+	}
+
+	public List<ReserveStation> getReserveStations() {
+		List<ReserveStation> rs = new ArrayList<ReserveStation>();
+		rs.addAll(adder.getStations());
+		rs.addAll(multiplier.getStations());
+		rs.addAll(memUnit.getStations());
+		return rs;
+	}
+	public Integer getClock(){
+		return clock;
 	}
 }

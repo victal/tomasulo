@@ -10,13 +10,14 @@ import processor.Processor;
 import registers.Reg;
 
 public class ReorderingBuffer {
-	public static final Integer SIZE = 20;
+	public static final Integer SIZE = 10;
 
 	private Processor p;//OK
 	private List<ReorderingLine> buffer;//OK
 	private MemoriaDados md;//OK
 	private Integer listinit;//OK
 	private PredictionBuffer pbuffer;//OK
+	private Integer completedInstructions = 0;
 	
 	public ReorderingBuffer(){
 		buffer = new ArrayList<ReorderingLine>();
@@ -102,6 +103,7 @@ public class ReorderingBuffer {
 	public void updateState(Instrucao inst, Integer state){
 		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
 			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
+				if(state>=ReorderingLine.GRAVAR)completedInstructions++;
 				buffer.get(i%ReorderingBuffer.SIZE).setState(state);
 				return;
 			}
@@ -183,5 +185,8 @@ public class ReorderingBuffer {
 				return false;
 		}
 		return true;
+	}
+	public Integer getCompleted(){
+		return completedInstructions;
 	}
 }
