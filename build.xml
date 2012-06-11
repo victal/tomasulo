@@ -1,0 +1,42 @@
+<project name="tomasulo" default="dist" basedir=".">
+
+  <property name="src" location="src"/>
+  <property name="resources" location="resources"/>
+  <property name="images_root_name" value="img"/>
+  <property name="images" location="src/${images_root_name}"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="jar.file"  location="${dist}/tomasulo.jar"/>
+
+
+  <target name="compile" description="compile the source " >
+    <mkdir dir="${build}"/>
+    <javac srcdir="${src}" destdir="${build}"/>
+
+    <copy todir="${build}/${images_root_name}" > 
+        <fileset dir="${images}"/>
+    </copy>
+  </target>
+
+
+
+  <target name="dist" depends="compile" description="generate the distribution" >
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${jar.file}" basedir="${build}">
+        <manifest>
+            <attribute name="Main-Class" value="main.Gui"/>
+        </manifest>
+        <fileset dir="${resources}" />
+    </jar>
+  </target>
+
+
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+
+</project>
