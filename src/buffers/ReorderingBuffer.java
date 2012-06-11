@@ -78,6 +78,7 @@ public class ReorderingBuffer {
 			}
 		line.setFree();
 		listinit = (listinit+1)%ReorderingBuffer.SIZE;
+		completedInstructions++;
 		}
 	}
 
@@ -103,7 +104,6 @@ public class ReorderingBuffer {
 		this.p = p;
 	}
 	public void updateState(Integer i, Integer state){
-		if(state>=ReorderingLine.GRAVAR)completedInstructions++;
 		buffer.get(i%ReorderingBuffer.SIZE).setState(state);
 	}
 	public Integer getState(Integer i){
