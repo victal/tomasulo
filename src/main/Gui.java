@@ -107,9 +107,8 @@ public class Gui {
 			public void run() {
 				try {
 					File f = new File("teste.mips");
-					Processor p = Utils.buildProcessor(f, 1);
+					Processor p = Utils.buildProcessor(f, 2);
 					Gui window = new Gui(p);
-					
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -848,5 +847,12 @@ public class Gui {
 		setClockCorrente(clocks);
 		setCpi(completed>0 ? completed/clocks : completed);
 		updateReorder();
+		if(endereco1.getText()!=null&&p.getDataMemory().getLastAddress()!=null){
+			String lastAddress = endereco1.getText();
+			if(lastAddress!=p.getDataMemory().getLastAddress().toString())
+				useAddress(p.getDataMemory().getLastAddress().toString(),p.getDataMemory().getLastValue().toString());
+		}
+		else if(p.getDataMemory().getLastAddress()!=null)
+			useAddress(p.getDataMemory().getLastAddress().toString(),p.getDataMemory().getLastValue().toString());
 	}
 }

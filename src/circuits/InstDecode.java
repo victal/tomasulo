@@ -1,6 +1,5 @@
 package circuits;
 
-import instructions.IInstrucao;
 import instructions.Instrucao;
 import buffers.PredictionBuffer;
 
@@ -20,10 +19,9 @@ public class InstDecode {
 	public void decodeInst(){
 		if(toDecode==null) return;//POG clock = 0;
 		if(toDecode.isBranch()){
-			/*Integer jumpPC = toDecode.getDadoImediato()*4 + IF.getPC();
-			if(toDecode.getNome().equals("ble"))*/
 			Integer jumpPC = toDecode.getDadoImediato();
-			this.buffer.addLine(toDecode, IF.getPC(), jumpPC);
+			if(buffer.getLine(IF.getPC())==null)
+				this.buffer.addLine(toDecode,IF.getPC(), jumpPC);
 		}
 		this.decoded = this.toDecode;
 	}
@@ -33,7 +31,8 @@ public class InstDecode {
 			return toDecode.getDadoImediato();
 		}
 		else if(toDecode.isBranch()){
-			Integer temp = buffer.getGuessPC(toDecode); 
+			System.err.println(IF.getPC());
+			Integer temp = buffer.getGuessPC(IF.getPC()); 
 			return temp;
 		}
 		if(IF.getPC()==0 && toDecode==null) return 0;//POG clock = 0;
