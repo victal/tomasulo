@@ -3,7 +3,7 @@ package prediction;
 public class TwoBitPreditor implements Preditor {
 
 	private boolean bit1=false;
-	private boolean bit0=false;
+	private boolean bit0=true;
 	@Override
 	public boolean shallJump() {
 		return bit1;
