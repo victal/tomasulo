@@ -18,9 +18,11 @@ import processor.ProcessorBuilder;
 
 public class Utils {
 
+	private static File currentFile = new File("teste.mips");;
 	public static void main(String[] args) {
 
 		File f = new File("teste.mips");
+		currentFile = f;
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,0);
@@ -31,6 +33,12 @@ public class Utils {
 	}
 	public static Processor buildProcessor(File f, Integer num){
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
+		MemoriaDados memdados = new MemoriaDados();
+		Processor p = ProcessorBuilder.build(meminst, memdados,num);
+		return p;
+	}
+	public static Processor buildProcessor(Integer num){
+		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(currentFile));
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,num);
 		return p;
@@ -69,5 +77,10 @@ public class Utils {
 		else  f = new File("resources/teste.mips");
 		
 		return f;
+	}
+	public static Processor createProcessor(int n) {
+		File f = chooseFile();
+		currentFile = f;
+		return buildProcessor(f, n);
 	}
 }

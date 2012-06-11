@@ -31,7 +31,6 @@ public class InstDecode {
 			return toDecode.getDadoImediato();
 		}
 		else if(toDecode.isBranch()){
-			System.err.println(IF.getPC());
 			Integer temp = buffer.getGuessPC(IF.getPC()); 
 			return temp;
 		}

@@ -30,6 +30,7 @@ public class Processor {
 	private CommonBus bus;
 	private List<Instrucao> idBuffer = new ArrayList<Instrucao>();
 	private Integer clock =0;
+	private boolean paused=false;
 	
 	public void runStep(){
 		/*IF e ID*/
@@ -168,5 +169,15 @@ public class Processor {
 	}
 	public Integer getClock(){
 		return clock;
+	}
+
+	public boolean isStopped() {
+		return paused;
+	}
+	public void stop(){
+		this.paused=true;
+	}
+	public void resume(){
+		this.paused = false;
 	}
 }

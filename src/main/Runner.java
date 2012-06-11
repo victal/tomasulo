@@ -26,7 +26,7 @@ public class Runner extends SwingWorker<Object, Void> {
 	
 	public void runProc(){
 		running=true;
-		while(/*!mips.isStopped()&&*/!mips.isFinished()){
+		while(!mips.isStopped()&&!mips.isFinished()){
 			runStep();
 		}
 		running=false;
@@ -42,7 +42,7 @@ public class Runner extends SwingWorker<Object, Void> {
 		return null;
 	}
 	public boolean isRunning(){
-		return running;
+		return running && !mips.isStopped();
 	}
 	public void resetMips(Processor mips){
 		this.mips=mips;
