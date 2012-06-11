@@ -182,9 +182,12 @@ public class Gui {
 		registradores[i].setText(String.valueOf(value));
 	}
 	
-	public void setRegAux(int i, float value)
+	public void setRegAux(int i, Float value)
 	{
-		registradoresAux[i].setText(String.valueOf(value));
+		if(value!=null)
+			registradoresAux[i].setText(String.valueOf(value));
+		else
+			registradoresAux[i].setText(" ");
 	}
 	
 	public void useAddress(String address, String value)
@@ -237,7 +240,13 @@ public class Gui {
 			tablbufferReordenacao.getModel().setValueAt(lines.get(i).isBusy(), i, 1);
 			if(lines.get(i).getInst()!=null)
 				tablbufferReordenacao.getModel().setValueAt(lines.get(i).getInst().getNome(), i, 2);
-			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getState(), i, 3);
+			String estado = " ";
+			Integer state = lines.get(i).getState();
+			if(state == ReorderingLine.EMITIDA) estado =  "Emitida";
+			else if(state ==ReorderingLine.EXECUCAO) estado = "Executando";
+			else if(state ==ReorderingLine.GRAVAR) estado = "Gravacao";
+			else if(state ==ReorderingLine.CONSOLIDAR) estado = "Consolidar";
+			tablbufferReordenacao.getModel().setValueAt(estado, i, 3);
 			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getDest(), i, 4);
 			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getValue(), i, 5);
 			tablbufferReordenacao.clearSelection();
@@ -1122,10 +1131,11 @@ public class Gui {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				p.stop();
+				runner.setRun(false);
 				runner.cancel(true);
 				Processor p = Utils.createProcessor(comboBox.getSelectedIndex());
 				resetAll(p);
-				
+				System.err.println("Combobox");
 				
 			}
 
@@ -1133,6 +1143,7 @@ public class Gui {
 		comboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				p.stop();
 				runner.cancel(true);
 				Processor p = Utils.buildProcessor(comboBox.getSelectedIndex());
 				resetAll(p);
@@ -1150,7 +1161,9 @@ public class Gui {
 		for (int i = 0; i<p.getRegs().size();i++){
 			setReg(i, p.getRegs().get(i).getValue());
 			if(p.getRegs().get(i).getQi()!=null)
-				setRegAux(i, p.getRegs().get(i).getQi());
+				setRegAux(i, new Float(p.getRegs().get(i).getQi()));
+			else
+				setRegAux(i, null);
 		}
 		ReorderingBuffer r = p.getReorder();
 		for(int i = 0; i<r.getLines().size();i++){

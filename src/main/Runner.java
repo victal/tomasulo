@@ -26,7 +26,7 @@ public class Runner extends SwingWorker<Object, Void> {
 	
 	public void runProc(){
 		running=true;
-		while(!mips.isStopped()&&!mips.isFinished()){
+		while(!mips.isStopped()&&!mips.isFinished()&&!isCancelled()){
 			runStep();
 		}
 		running=false;

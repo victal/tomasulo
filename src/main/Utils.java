@@ -21,7 +21,8 @@ import processor.ProcessorBuilder;
 
 public class Utils {
 
-	private static InputStream currentFile = Class.class.getResourceAsStream("/teste.mips");
+	private static String defaultFile ="/teste.mips";
+	private static File currentFile = null;
 
 	public static Processor buildProcessor(InputStream f, Integer num){
 		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(f));
@@ -30,7 +31,18 @@ public class Utils {
 		return p;
 	}
 	public static Processor buildProcessor(Integer num){
-		MemoriaInstrucao meminst = MemBuilder.buildMemInstruction(lerInstrucoes(currentFile));
+		MemoriaInstrucao meminst; 
+		if(currentFile == null){
+			InputStream defInput = Class.class.getResourceAsStream(defaultFile);
+			meminst = MemBuilder.buildMemInstruction(lerInstrucoes(defInput));
+		} else
+			try {
+				meminst = MemBuilder.buildMemInstruction(lerInstrucoes(new FileInputStream(currentFile)));
+			} catch (FileNotFoundException e) {
+				InputStream defInput = Class.class.getResourceAsStream(defaultFile);
+				meminst = MemBuilder.buildMemInstruction(lerInstrucoes(defInput));
+				e.printStackTrace();
+			}
 		MemoriaDados memdados = new MemoriaDados();
 		Processor p = ProcessorBuilder.build(meminst, memdados,num);
 		return p;
@@ -66,6 +78,7 @@ public class Utils {
 		if(fc.getSelectedFile()!=null){
 			try {
 				f = new FileInputStream(fc.getSelectedFile());
+				currentFile = fc.getSelectedFile();
 			} catch (FileNotFoundException e) {
 
 				e.printStackTrace();
@@ -76,7 +89,6 @@ public class Utils {
 	}
 	public static Processor createProcessor(int n) {
 		InputStream f = chooseFile();
-		currentFile = f;
 		return buildProcessor(f, n);
 	}
 }
