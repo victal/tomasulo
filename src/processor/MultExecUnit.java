@@ -35,6 +35,7 @@ public class MultExecUnit implements ExecutionUnit {
 			for (ReserveStation r:stations){
 				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
 					current=r;
+					currentNumClocks=1;
 					return;
 				}
 			}
@@ -57,12 +58,13 @@ public class MultExecUnit implements ExecutionUnit {
 		else if(op.equals("div")){
 			result = current.getVj()/current.getVk();
 		}
-		reorder.updateState(current.getInstrucao(), ReorderingLine.GRAVAR);
+		reorder.updateState(current.getDest(), ReorderingLine.GRAVAR);
 		if(bus.isBusy()) return;
 		Integer dest = current.getDest();
 		bus.sendData(current.getInstrucao(), dest, result);
 		current.unsetBusy();
 		current=null;
+		
 	}
 
 	@Override
@@ -75,12 +77,12 @@ public class MultExecUnit implements ExecutionUnit {
 	}
 
 	@Override
-	public void loadInst(Instrucao i) {
+	public Integer loadInst(Instrucao i) {
 		Integer numStation = 0;
 		for(int j =0;j<MultExecUnit.numStations;j++){
 			if(!stations.get(j).isBusy())numStation=j;
 		}
-		stations.get(numStation).load(i);
+		return stations.get(numStation).load(i);
 	}
 
 	@Override

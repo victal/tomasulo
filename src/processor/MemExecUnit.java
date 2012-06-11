@@ -39,11 +39,13 @@ public class MemExecUnit implements ExecutionUnit {
 					boolean hasStore = reorder.hasStoreBefore(r.getInstrucao());
 					if(r.getInstrucao().getNome().equals("lw")&& !hasStore){
 						current=r;
+						currentNumClocks=1;
 						return;
 					}
 					boolean hasMem = reorder.hasMemInstBefore(r.getInstrucao());
 					if(!hasMem){
 						current=r;
+						currentNumClocks=1;
 						return;
 					}
 				}
@@ -63,17 +65,19 @@ public class MemExecUnit implements ExecutionUnit {
 		Integer result=null;
 		if(op.equals("lw")){
 			result = mem.getValue(current.getA()+current.getVj());
+			System.err.println("Lendo "+result+" em "+(current.getA()+current.getVj()));
 		}
 		else {
-			reorder.setAdress(current.getDest(),current.getA()+current.getVj());
+			reorder.setAddress(current.getDest(),current.getA()+current.getVj());
 			result = current.getVk();
 		}
-		reorder.updateState(current.getInstrucao(), ReorderingLine.GRAVAR);
+		reorder.updateState(current.getDest(), ReorderingLine.GRAVAR);
 		if(bus.isBusy()) return;
 		Integer dest = current.getDest();
 		bus.sendData(current.getInstrucao(), dest, result);
 		current.unsetBusy();
 		current=null;
+		
 	}
 
 	@Override
@@ -86,12 +90,12 @@ public class MemExecUnit implements ExecutionUnit {
 	}
 	
 	@Override
-	public void loadInst(Instrucao i) {
+	public Integer loadInst(Instrucao i) {
 		Integer numStation = 0;
 		for(int j =0;j<MemExecUnit.numStations;j++){
 			if(!stations.get(j).isBusy())numStation=j;
 		}
-		stations.get(numStation).load(i);
+		return stations.get(numStation).load(i);
 
 	}
 

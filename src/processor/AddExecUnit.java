@@ -45,7 +45,7 @@ public class AddExecUnit implements ExecutionUnit {
 			else if(op.equals("add")){
 				result = current.getVj()+current.getVk();
 			}
-			reorder.updateState(current.getInstrucao(), ReorderingLine.GRAVAR);
+			reorder.updateState(current.getDest(), ReorderingLine.GRAVAR);
 			
 			if(bus.isBusy()) return;
 			
@@ -55,10 +55,8 @@ public class AddExecUnit implements ExecutionUnit {
 				result = current.getA();
 			else if(inst.isBranch()){
 				if(inst.getNome().equals("ble")){
-					System.err.println("ble");
 					if(result>0)result = null;
 					else result = current.getA();
-					System.err.println("result "+result);
 				}
 				if(inst.getNome().equals("bne")){
 					if(result==0)result = null;
@@ -72,37 +70,40 @@ public class AddExecUnit implements ExecutionUnit {
 			bus.sendData(inst, dest, result);
 			current.unsetBusy();
 			current=null;
+			
 		}
 		
 	}
 	public void chooseStation(){
 		if(current == null){
 			for (ReserveStation r:stations){
-				if(r.getInstrucao()!=null)
-					System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
+				//if(r.getInstrucao()!=null)
+					//System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
 				if(r.isBusy() && r.getQj()==null && r.getQk()==null && !r.getInstrucao().getALUOp().equals("nop")){
 					current=r;
+					currentNumClocks=1;
 					return;
 				}
 			}
 			for (ReserveStation r:stations){
-				if(r.getInstrucao()!=null)
-					System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
+				//if(r.getInstrucao()!=null)
+					//System.err.println(stations.indexOf(r)+" "+r.getInstrucao().toString() + " "+r.getInstrucao().getNome());
 				if(r.isBusy() && r.getQj()==null && r.getQk()==null){
 					current=r;
+					currentNumClocks=1;
 					return;
 				}
 			}
 			
 		}
 	}
-	public void loadInst(Instrucao i){
+	public Integer loadInst(Instrucao i){
 		Integer numStation = 0;
 		for(int j =0;j<AddExecUnit.numStations;j++){
 			if(!stations.get(j).isBusy())numStation=j;
 		}
 		stations.get(numStation).clean();
-		stations.get(numStation).load(i);
+		return stations.get(numStation).load(i);
 	}
 	
 	public void setRegs(List<Reg> regs){

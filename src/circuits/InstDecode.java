@@ -33,7 +33,8 @@ public class InstDecode {
 			return toDecode.getDadoImediato();
 		}
 		else if(toDecode.isBranch()){
-			return buffer.getGuessPC(toDecode);
+			Integer temp = buffer.getGuessPC(toDecode); 
+			return temp;
 		}
 		if(IF.getPC()==0 && toDecode==null) return 0;//POG clock = 0;
 		return IF.getPC()+4;

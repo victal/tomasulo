@@ -46,15 +46,16 @@ public class ReorderingBuffer {
 		}else{			
 			if(line.getDest()!=null){ //Operações da ULA e Loads
 				regs.get(line.getDest()).setValue(line.getValue());
-				regs.get(line.getDest()).setQi(null);
+				if(regs.get(line.getDest()).getQi().equals(buffer.indexOf(line)))
+						regs.get(line.getDest()).setQi(null);
 			}
 			else{
 				Instrucao i = line.getInst();
-				System.err.println("Consolidating "+line.getInst().getNome());
+				//System.err.println("Consolidating "+line.getInst().getNome());
 				if(i.isBranch()){ 
 					PredictionLine pl = pbuffer.getLine(i);
 					if(line.getValue()==null){
-						line.setValue(pl.getInstPC());
+						line.setValue(pl.getInstPC()+4);
 					}
 					if(!pl.getGuessPC().equals(line.getValue())){//errou, apagar tudo
 						cleanAllInstructions(); 
@@ -62,7 +63,7 @@ public class ReorderingBuffer {
 							line.setValue(line.getValue()+4);
 						p.getIF().setNewPC(line.getValue());
 					}
-					if(line.getValue().equals(pl.getInstPC())){
+					if(line.getValue().equals(pl.getInstPC()+4)){
 						pl.addNotJump();
 					}
 					else{
@@ -70,11 +71,12 @@ public class ReorderingBuffer {
 					}
 				}
 				else if(i.getNome().equals("sw")){//Store
+					System.err.println("gravando "+line.getValue()+" em "+line.getAddress());
 					md.setValue(line.getAddress(),line.getValue());
 				}
 
 			}
-		buffer.get(listinit).setFree();
+		line.setFree();
 		listinit = (listinit+1)%ReorderingBuffer.SIZE;
 		}
 	}
@@ -100,14 +102,9 @@ public class ReorderingBuffer {
 	public void setProcessor(Processor p){
 		this.p = p;
 	}
-	public void updateState(Instrucao inst, Integer state){
-		for(int i = listinit;i<listinit+ReorderingBuffer.SIZE;i++){
-			if(buffer.get(i%ReorderingBuffer.SIZE).getInst().equals(inst)){
-				if(state>=ReorderingLine.GRAVAR)completedInstructions++;
-				buffer.get(i%ReorderingBuffer.SIZE).setState(state);
-				return;
-			}
-		}
+	public void updateState(Integer i, Integer state){
+		if(state>=ReorderingLine.GRAVAR)completedInstructions++;
+		buffer.get(i%ReorderingBuffer.SIZE).setState(state);
 	}
 	public Integer getState(Integer i){
 		return buffer.get(i).getState();
@@ -123,7 +120,7 @@ public class ReorderingBuffer {
 	public void store(Integer reorderIndex, Integer value) {
 		ReorderingLine line = buffer.get(reorderIndex);
 		if(line.getInst().isBranch()&&value==null){
-			line.setValue(pbuffer.getLine(line.getInst()).getInstPC());
+			line.setValue(pbuffer.getLine(line.getInst()).getInstPC()+4);
 		}
 		else line.setValue(value);
 		line.setState(ReorderingLine.CONSOLIDAR);
@@ -175,7 +172,7 @@ public class ReorderingBuffer {
 	}
 
 
-	public void setAdress(Integer dest, Integer value) {
+	public void setAddress(Integer dest, Integer value) {
 		buffer.get(dest).setAddress(value);
 	}
 	
@@ -188,5 +185,19 @@ public class ReorderingBuffer {
 	}
 	public Integer getCompleted(){
 		return completedInstructions;
+	}
+
+
+	public boolean isFull() {
+		for(int i = listinit;i<listinit+SIZE;i++){
+			if(!buffer.get(i%ReorderingBuffer.SIZE).isBusy()){
+				return false;
+			}
+		}
+		System.err.println("full");
+		return true;
+	}
+	public Integer getListInit(){
+		return listinit;
 	}
 }

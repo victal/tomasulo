@@ -39,7 +39,7 @@ public class ReserveStation {
 		return instrucao;
 	}
 	
-	public void load(Instrucao i){
+	public Integer load(Instrucao i){
 		this.busy = true;
 		this.instrucao = i;
 		ReorderingBuffer reorder = eu.getReorder();
@@ -52,6 +52,8 @@ public class ReserveStation {
 				else this.qj = regs.get(regslidos.get(0)).getQi();
 			}
 			else this.vj = regs.get(regslidos.get(0)).getValue();
+			this.qk=null;
+			this.vk=null;
 		}
 		if(regslidos.size()==2){
 			if(regs.get(regslidos.get(1)).getQi()!=null){
@@ -71,6 +73,7 @@ public class ReserveStation {
 		this.dest = reorder.loadFirstEmpty(i);
 		if(i.getRegistradorEscrito()!=null) //Stores, nops, jumps e branches
 			regs.get(i.getRegistradorEscrito()).setQi(dest);
+		return dest;
 	} 
 	public void setRegs(List<Reg> regs){
 		this.regs = regs;

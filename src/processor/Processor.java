@@ -35,9 +35,7 @@ public class Processor {
 		/*IF e ID*/
 		ID.decodeInst(); 
 		IF.setNewPC(ID.getNewPC());
-		System.err.println("emissão");
 		emitirInst();// Coloca no Buffer de Reordenação tbm;
-		System.err.println("depois da emissão");
 		/* Execução e colocação no reorderingBuffer */
 		
 		multiplier.runStep();
@@ -74,27 +72,29 @@ public class Processor {
 		if(ID.getDecodedInst()!=null)
 			idBuffer.add(ID.getDecodedInst());
 		if(idBuffer.isEmpty())return;
+		if(reorder.isFull())return;
 		Instrucao i = idBuffer.get(0);
 		String inome = i.getNome();
+		Integer dest = null;
 		if(inome.equals("mul")||inome.equals("div")){
 			if(!multiplier.isFull()){
-				multiplier.loadInst(i);
+				dest=multiplier.loadInst(i);
 				idBuffer.remove(0);
 			}
 		}
 		else if(inome.equals("lw")||inome.equals("sw")){
 			if(!memUnit.isFull()){
-				memUnit.loadInst(i);
+				dest=memUnit.loadInst(i);
 				idBuffer.remove(0);
 			}
 		}
 		else{
 			if(!adder.isFull()){
-				adder.loadInst(i);
+				dest=adder.loadInst(i);
 				idBuffer.remove(0);
 			}
 		}
-		if(idBuffer.isEmpty()||!i.equals(idBuffer.get(0)))reorder.updateState(i,ReorderingLine.EMITIDA);
+		if(dest!=null){reorder.updateState(dest,ReorderingLine.EMITIDA);}
 	}
 
 

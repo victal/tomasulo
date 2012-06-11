@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import processor.Processor;
 import reserve.ReserveStation;
 import buffers.ReorderingBuffer;
+import buffers.ReorderingLine;
 
 
 public class Gui {
@@ -106,7 +107,7 @@ public class Gui {
 			public void run() {
 				try {
 					File f = new File("teste.mips");
-					Processor p = Utils.buildProcessor(f, 0);
+					Processor p = Utils.buildProcessor(f, 1);
 					Gui window = new Gui(p);
 					
 					window.frame.setVisible(true);
@@ -179,7 +180,22 @@ public class Gui {
 		setQk(stationId, qk);
 		setA(stationId, a);
 	}
-	
+	public void updateReorder(){
+		List<ReorderingLine> lines = p.getReorder().getLines();
+		for(int i = 0;i<10;i++){
+			tablbufferReordenacao.getModel().setValueAt(i, i, 0);
+			tablbufferReordenacao.getModel().setValueAt(lines.get(i).isBusy(), i, 1);
+			if(lines.get(i).getInst()!=null)
+				tablbufferReordenacao.getModel().setValueAt(lines.get(i).getInst().getNome(), i, 2);
+			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getState(), i, 3);
+			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getDest(), i, 4);
+			tablbufferReordenacao.getModel().setValueAt(lines.get(i).getValue(), i, 5);
+			tablbufferReordenacao.clearSelection();
+			tablbufferReordenacao.changeSelection(p.getReorder().getListInit(), 0, true, false);
+			tablbufferReordenacao.changeSelection(p.getReorder().getListInit(), 5, false,true);
+			
+		}
+	}
 	public void setBusy(int stationId, String value)
 	{
 		if(value!=null)
@@ -831,5 +847,6 @@ public class Gui {
 		setPc(pc);
 		setClockCorrente(clocks);
 		setCpi(completed>0 ? completed/clocks : completed);
+		updateReorder();
 	}
 }
