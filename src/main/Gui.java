@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -150,7 +151,7 @@ public class Gui {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File f = new File("teste.mips");
+					InputStream f = Class.class.getResourceAsStream("/teste.mips");
 					Processor p = Utils.buildProcessor(f, 0);
 					Gui window = new Gui(p);
 					window.frame.setVisible(true);
